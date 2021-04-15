@@ -6,12 +6,7 @@ using System.Threading.Tasks;
 
 namespace Nonogram.Models
 {
-    class TilesGrid
+    class Game
     {
-        public int Height { get; set; }
-
-        public int Width { get; set; }
-
-        public Tile[,] Tiles { get; set; }
     }
 }

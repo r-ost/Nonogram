@@ -29,12 +29,112 @@ namespace Nonogram.Views
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
+            this.mainStrip = new System.Windows.Forms.MenuStrip();
+            this.newGameMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.randomSubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.chooseSubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loadSubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createPuzzleSubMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.gridWrapper = new System.Windows.Forms.Panel();
+            this.mainStrip.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // mainStrip
+            // 
+            this.mainStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.mainStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newGameMenuItem,
+            this.createMenuItem});
+            this.mainStrip.Location = new System.Drawing.Point(0, 0);
+            this.mainStrip.Name = "mainStrip";
+            this.mainStrip.Size = new System.Drawing.Size(982, 28);
+            this.mainStrip.TabIndex = 0;
+            this.mainStrip.Text = "New Game";
+            // 
+            // newGameMenuItem
+            // 
+            this.newGameMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.randomSubMenuItem,
+            this.chooseSubMenuItem,
+            this.loadSubMenuItem});
+            this.newGameMenuItem.Name = "newGameMenuItem";
+            this.newGameMenuItem.Size = new System.Drawing.Size(96, 24);
+            this.newGameMenuItem.Text = "New Game";
+            // 
+            // randomSubMenuItem
+            // 
+            this.randomSubMenuItem.Enabled = false;
+            this.randomSubMenuItem.Name = "randomSubMenuItem";
+            this.randomSubMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.randomSubMenuItem.Text = "Random";
+            // 
+            // chooseSubMenuItem
+            // 
+            this.chooseSubMenuItem.Enabled = false;
+            this.chooseSubMenuItem.Name = "chooseSubMenuItem";
+            this.chooseSubMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.chooseSubMenuItem.Text = "Choose puzzle";
+            // 
+            // loadSubMenuItem
+            // 
+            this.loadSubMenuItem.Enabled = false;
+            this.loadSubMenuItem.Name = "loadSubMenuItem";
+            this.loadSubMenuItem.Size = new System.Drawing.Size(188, 26);
+            this.loadSubMenuItem.Text = "Load puzzle";
+            // 
+            // createMenuItem
+            // 
+            this.createMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createPuzzleSubMenuItem});
+            this.createMenuItem.Name = "createMenuItem";
+            this.createMenuItem.Size = new System.Drawing.Size(75, 24);
+            this.createMenuItem.Text = "Create...";
+            // 
+            // createPuzzleSubMenuItem
+            // 
+            this.createPuzzleSubMenuItem.Enabled = false;
+            this.createPuzzleSubMenuItem.Name = "createPuzzleSubMenuItem";
+            this.createPuzzleSubMenuItem.Size = new System.Drawing.Size(191, 26);
+            this.createPuzzleSubMenuItem.Text = "Create puzzle...";
+            // 
+            // gridWrapper
+            // 
+            this.gridWrapper.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridWrapper.Location = new System.Drawing.Point(0, 28);
+            this.gridWrapper.Name = "gridWrapper";
+            this.gridWrapper.Size = new System.Drawing.Size(982, 725);
+            this.gridWrapper.TabIndex = 1;
+            // 
+            // ShellFormView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
-            this.Text = "ShellFormView";
+            this.ClientSize = new System.Drawing.Size(982, 753);
+            this.Controls.Add(this.gridWrapper);
+            this.Controls.Add(this.mainStrip);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.mainStrip;
+            this.MaximizeBox = false;
+            this.Name = "ShellFormView";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Nonogram";
+            this.mainStrip.ResumeLayout(false);
+            this.mainStrip.PerformLayout();
+            this.ResumeLayout(false);
+            this.PerformLayout();
+
         }
 
         #endregion
+
+        private System.Windows.Forms.MenuStrip mainStrip;
+        private System.Windows.Forms.ToolStripMenuItem newGameMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem randomSubMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem chooseSubMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loadSubMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem createPuzzleSubMenuItem;
+        private System.Windows.Forms.Panel gridWrapper;
     }
 }

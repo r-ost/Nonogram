@@ -29,10 +29,42 @@ namespace Nonogram.Views
         /// </summary>
         private void InitializeComponent()
         {
-            components = new System.ComponentModel.Container();
+            this.gridPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.SuspendLayout();
+            // 
+            // gridPanel
+            // 
+            this.gridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.gridPanel.BackColor = System.Drawing.Color.White;
+            this.gridPanel.ColumnCount = 2;
+            this.gridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gridPanel.Location = new System.Drawing.Point(0, 0);
+            this.gridPanel.Margin = new System.Windows.Forms.Padding(0);
+            this.gridPanel.Name = "gridPanel";
+            this.gridPanel.RowCount = 2;
+            this.gridPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gridPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.gridPanel.Size = new System.Drawing.Size(697, 508);
+            this.gridPanel.TabIndex = 0;
+            // 
+            // GridControlView
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
+            this.BackColor = System.Drawing.Color.White;
+            this.Controls.Add(this.gridPanel);
+            this.Margin = new System.Windows.Forms.Padding(0);
+            this.Name = "GridControlView";
+            this.Size = new System.Drawing.Size(697, 511);
+            this.Load += new System.EventHandler(this.GridControlView_Load);
+            this.ResumeLayout(false);
+
         }
 
         #endregion
+
+        private System.Windows.Forms.TableLayoutPanel gridPanel;
     }
 }
