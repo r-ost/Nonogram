@@ -17,6 +17,7 @@ namespace Nonogram.Views
         public GridControlView()
         {
             InitializeComponent();
+            new GridPresenter(this);
         }
     }
 }

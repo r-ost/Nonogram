@@ -11,21 +11,6 @@ namespace Nonogram.Models
 {
     class Tile : INotifyPropertyChanged
     {
-        private bool _crossed;
-
-        public bool Crossed 
-        {
-            get
-            {
-                return _crossed;
-            }
-            set
-            {
-                _crossed = value;
-                NotifyPropertyChanged();
-            }
-        }
-
         private bool _selected;
         public bool Selected
         {
