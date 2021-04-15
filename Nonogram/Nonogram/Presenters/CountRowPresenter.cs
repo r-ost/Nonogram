@@ -15,6 +15,7 @@ namespace Nonogram.Presenters
         private CountRowView _view;
 
         private List<int>[] _counts;
+        public List<int>[] Counts { get => _counts; }
 
         public CountRowPresenter(CountRowView view, TilesGrid tilesGrid)
         {

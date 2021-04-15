@@ -16,34 +16,55 @@ namespace Nonogram.Presenters
     class GridPresenter 
     {
         private GridControlView _gridControlView;
-        private TilesGrid _grid;
+        private TilesGrid _tilesGrid;
+         
+        public TilesGrid TilesGrid { get => _tilesGrid; }
 
-        public TilesGrid Grid { get => _grid; }
+
+        private List<int>[] _rowsCounts;
+
+        public List<int>[] RowsCounts
+        {
+            get { return _rowsCounts; }
+            set { _rowsCounts = value; }
+        }
+
+        private List<int>[] _columnsCounts;
+
+        public List<int>[] ColumnsCounts
+        {
+            get { return _columnsCounts; }
+            set { _columnsCounts = value; }
+        }
+
 
 
         public GridPresenter(GridControlView gridControlView)
         {
             _gridControlView = gridControlView;
-            _grid = new TilesGrid();
+            _tilesGrid = new TilesGrid();
             
             CreateGridOnStartup();
 
-            DrawTiles(_grid.Height, _grid.Height);
+            DrawTiles(_tilesGrid.Height, _tilesGrid.Width);
+
+            currRows = new List<int>[_tilesGrid.Height];
+            currColumns = new List<int>[_tilesGrid.Width];
         }
 
         public void CreateGridOnStartup()
         {
-            int width = 10;
-            int height = 10;
+            int width = 5;
+            int height = 3;
 
-            _grid.Height = height;
-            _grid.Width = width;
-            _grid.Tiles = new Tile[height, width];
+            _tilesGrid.Height = height;
+            _tilesGrid.Width = width;
+            _tilesGrid.Tiles = new Tile[height, width];
 
-            Random rand = new Random(10);
-            for (int i = 0; i < _grid.Tiles.GetLength(0); i++)
+            Random rand = new Random();
+            for (int i = 0; i < _tilesGrid.Tiles.GetLength(0); i++)
             {
-                for (int j = 0; j < _grid.Tiles.GetLength(1); j++)
+                for (int j = 0; j < _tilesGrid.Tiles.GetLength(1); j++)
                 {
                     Tile tile = new Tile();
                     tile.Crossed = false;
@@ -53,7 +74,7 @@ namespace Nonogram.Presenters
                     else
                         tile.Selected = true;
 
-                    _grid.Tiles[i, j] = tile;
+                    _tilesGrid.Tiles[i, j] = tile;
                 }
             }
 
@@ -76,39 +97,44 @@ namespace Nonogram.Presenters
 
                     newButton.Dock = DockStyle.Fill;
                     
-                    newButton.MouseDown += (s, e) =>
+                    newButton.MouseUp += (s, e) =>
                     {
                         TableLayoutPanelCellPosition pos = _gridControlView.GridPanel.GetCellPosition((Control)s);
 
                         if (e.Button == MouseButtons.Left)
                         {
-                            _grid.Tiles[pos.Row, pos.Column].Selected = !_grid.Tiles[pos.Row, pos.Column].Selected;
-                            _grid.Tiles[pos.Row, pos.Column].Crossed = false;
+                            _tilesGrid.Tiles[pos.Row, pos.Column].Selected = !_tilesGrid.Tiles[pos.Row, pos.Column].Selected;
+                            _tilesGrid.Tiles[pos.Row, pos.Column].Crossed = false;
                         }
                         else if (e.Button == MouseButtons.Right)
                         {
-                            _grid.Tiles[pos.Row, pos.Column].Crossed = !_grid.Tiles[pos.Row, pos.Column].Crossed;
-                            _grid.Tiles[pos.Row, pos.Column].Selected = false;
+                            _tilesGrid.Tiles[pos.Row, pos.Column].Crossed = !_tilesGrid.Tiles[pos.Row, pos.Column].Crossed;
+                            _tilesGrid.Tiles[pos.Row, pos.Column].Selected = false;
                         }
                     };
 
 
-                    Binding leftClick = new Binding("BackColor", _grid.Tiles[i, j], "Selected");
+                    Binding leftClick = new Binding("BackColor", _tilesGrid.Tiles[i, j], "Selected");
                     leftClick.Format += (s, e) => {
                         e.Value = (bool)e.Value ? Color.Black : Color.White;
+
+                        if (Win())
+                        {
+                            Disable();
+                            MessageBox.Show("You won!");
+                        }
                     };
                     newButton.DataBindings.Add(leftClick);
 
                     var img = new Bitmap("./cross.png");
-               
                     
-                    Binding rightClick = new Binding("BackgroundImage", _grid.Tiles[i, j], "Crossed", true);
+                    Binding rightClick = new Binding("BackgroundImage", _tilesGrid.Tiles[i, j], "Crossed", true);
                     rightClick.Format += (s, e) =>
                     {
                         Button button = (Button)((Binding)s).Control;
                         TableLayoutPanelCellPosition pos = _gridControlView.GridPanel.GetCellPosition(button);
 
-                        if (_grid.Tiles[pos.Row, pos.Column].Crossed)
+                        if (_tilesGrid.Tiles[pos.Row, pos.Column].Crossed)
                         {
                             e.Value = img;
                         }
@@ -125,14 +151,18 @@ namespace Nonogram.Presenters
             }
         }
 
+        private void Disable()
+        {
+            _gridControlView.GridPanel.Enabled = false;
+        }
         private void InitializeGrid()
         {
             _gridControlView.GridPanel.Controls.Clear();
             _gridControlView.GridPanel.ColumnStyles.Clear();
             _gridControlView.GridPanel.RowStyles.Clear();
 
-            _gridControlView.GridPanel.ColumnCount = _grid.Width;
-            _gridControlView.GridPanel.RowCount = _grid.Height;
+            _gridControlView.GridPanel.ColumnCount = _tilesGrid.Width;
+            _gridControlView.GridPanel.RowCount = _tilesGrid.Height;
 
             int width = Tile.Width * _gridControlView.GridPanel.ColumnCount;
             int height = Tile.Height * _gridControlView.GridPanel.RowCount;
@@ -155,6 +185,96 @@ namespace Nonogram.Presenters
                 _gridControlView.GridPanel.RowStyles.Add(new RowStyle() { Height = Tile.Height, SizeType = SizeType.Absolute });
             }
 
+        }
+
+        private List<int>[] currRows;
+        private List<int>[] currColumns;
+        private bool Won = false;
+        private bool Win()
+        {
+            if (Won)
+                return false;
+            for (int k = 0; k < _rowsCounts.Length; k++)
+            {
+                int current = 0;
+                bool prev = false;
+                currRows[k] = new List<int>();
+                for (int kk = 0; kk < _tilesGrid.Width; kk++)
+                {
+                    if (_tilesGrid.Tiles[k, kk].Selected)
+                    {
+                        current++;
+                        prev = true;
+                    }
+                    else if (prev && !_tilesGrid.Tiles[k, kk].Selected)
+                    {
+                        currRows[k].Add(current);
+                        current = 0;
+                        prev = false;
+                    }
+                    else if (!_tilesGrid.Tiles[k, kk].Selected)
+                        prev = false;
+
+                }
+
+                if (current > 0)
+                    currRows[k].Add(current);
+            }
+
+            for (int k = 0; k < _columnsCounts.Length; k++)
+            {
+                int current = 0;
+                bool prev = false;
+                currColumns[k] = new List<int>();
+                for (int kk = 0; kk < _tilesGrid.Height; kk++)
+                {
+                    if (_tilesGrid.Tiles[kk, k].Selected)
+                    {
+                        current++;
+                        prev = true;
+                    }
+                    else if (prev && !_tilesGrid.Tiles[kk, k].Selected)
+                    {
+                        currColumns[k].Add(current);
+                        current = 0;
+                        prev = false;
+                    }
+                    else if (!_tilesGrid.Tiles[kk, k].Selected)
+                        prev = false;
+
+                }
+
+                if (current > 0)
+                    currColumns[k].Add(current);
+            }
+
+
+            bool equals = true;
+
+            for (int i = 0; i < currRows.Length; i++)
+            {
+                if (!currRows[i].SequenceEqual(_rowsCounts[i]))
+                {
+                    equals = false;
+                    break;
+                }
+            }
+
+            if (equals == false)
+                return false;
+
+            for (int i = 0; i < currColumns.Length; i++)
+            {
+                if (currColumns.SequenceEqual(_columnsCounts))
+                {
+                    equals = false;
+                    break;
+                }    
+            }
+
+            if (equals)
+                Won = true;
+            return equals;
         }
     }
 }
