@@ -29,13 +29,13 @@ namespace Nonogram.Views
         /// </summary>
         private void InitializeComponent()
         {
-            this.gridPanel = new System.Windows.Forms.TableLayoutPanel();
             this.SuspendLayout();
             // 
             // gridPanel
             // 
+            this.gridPanel = new System.Windows.Forms.TableLayoutPanel();
             this.gridPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.gridPanel.BackColor = System.Drawing.Color.White;
+            this.gridPanel.BackColor = System.Drawing.Color.Wheat;
             this.gridPanel.ColumnCount = 2;
             this.gridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.gridPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
@@ -58,7 +58,6 @@ namespace Nonogram.Views
             this.Margin = new System.Windows.Forms.Padding(0);
             this.Name = "GridControlView";
             this.Size = new System.Drawing.Size(697, 511);
-            this.Load += new System.EventHandler(this.GridControlView_Load);
             this.ResumeLayout(false);
 
         }
@@ -66,5 +65,6 @@ namespace Nonogram.Views
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel gridPanel;
+        public System.Windows.Forms.TableLayoutPanel GridPanel { get => gridPanel; }
     }
 }
