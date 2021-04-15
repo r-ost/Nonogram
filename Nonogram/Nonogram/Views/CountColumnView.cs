@@ -11,14 +11,11 @@ using System.Windows.Forms;
 
 namespace Nonogram.Views
 {
-    public partial class ShellFormView : Form
+    public partial class CountColumnView : UserControl
     {
-        
-
-        public ShellFormView()
+        public CountColumnView()
         {
             InitializeComponent();
-            new ShellPresenter(this);
         }
     }
 }

@@ -136,5 +136,6 @@ namespace Nonogram.Views
         private System.Windows.Forms.ToolStripMenuItem loadSubMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createPuzzleSubMenuItem;
         private System.Windows.Forms.Panel gridWrapper;
+        public System.Windows.Forms.Panel GridWrapper { get => gridWrapper; }
     }
 }
