@@ -20,12 +20,6 @@ namespace Nonogram.Presenters
 
         public TilesGrid Grid { get => _grid; }
 
-        //public int GridHeight { get => _grid.Height; } 
-        //public int GridWidth { get => _grid.Width; }
-
-        //public int TileWidth { get => Tile.Width; }
-        //public int TileHeight { get => Tile.Height; }
-
 
         public GridPresenter(GridControlView gridControlView)
         {
@@ -33,6 +27,7 @@ namespace Nonogram.Presenters
             _grid = new TilesGrid();
             
             CreateGridOnStartup();
+
             DrawTiles(_grid.Height, _grid.Height);
         }
 
@@ -45,12 +40,13 @@ namespace Nonogram.Presenters
             _grid.Width = width;
             _grid.Tiles = new Tile[height, width];
 
-            Random rand = new Random();
+            Random rand = new Random(10);
             for (int i = 0; i < _grid.Tiles.GetLength(0); i++)
             {
                 for (int j = 0; j < _grid.Tiles.GetLength(1); j++)
                 {
                     Tile tile = new Tile();
+                    tile.Crossed = false;
 
                     if (rand.Next() % 100 < 50)
                         tile.Selected = false;
@@ -63,6 +59,7 @@ namespace Nonogram.Presenters
 
             InitializeGrid();
         }
+
 
         private void DrawTiles(int rows, int columns)
         {
@@ -78,19 +75,49 @@ namespace Nonogram.Presenters
                     newButton.FlatAppearance.BorderSize = 1;
 
                     newButton.Dock = DockStyle.Fill;
-                    newButton.Click += (s, e) =>
+                    
+                    newButton.MouseDown += (s, e) =>
                     {
                         TableLayoutPanelCellPosition pos = _gridControlView.GridPanel.GetCellPosition((Control)s);
 
-                        _grid.Tiles[pos.Row, pos.Column].Selected = !_grid.Tiles[pos.Row, pos.Column].Selected;
+                        if (e.Button == MouseButtons.Left)
+                        {
+                            _grid.Tiles[pos.Row, pos.Column].Selected = !_grid.Tiles[pos.Row, pos.Column].Selected;
+                            _grid.Tiles[pos.Row, pos.Column].Crossed = false;
+                        }
+                        else if (e.Button == MouseButtons.Right)
+                        {
+                            _grid.Tiles[pos.Row, pos.Column].Crossed = !_grid.Tiles[pos.Row, pos.Column].Crossed;
+                            _grid.Tiles[pos.Row, pos.Column].Selected = false;
+                        }
                     };
 
 
-                    Binding bind = new Binding("BackColor", _grid.Tiles[i, j], "Selected");
-                    bind.Format += (s, e) => {
+                    Binding leftClick = new Binding("BackColor", _grid.Tiles[i, j], "Selected");
+                    leftClick.Format += (s, e) => {
                         e.Value = (bool)e.Value ? Color.Black : Color.White;
                     };
-                    newButton.DataBindings.Add(bind);
+                    newButton.DataBindings.Add(leftClick);
+
+                    var img = new Bitmap("./cross.png");
+               
+                    
+                    Binding rightClick = new Binding("BackgroundImage", _grid.Tiles[i, j], "Crossed", true);
+                    rightClick.Format += (s, e) =>
+                    {
+                        Button button = (Button)((Binding)s).Control;
+                        TableLayoutPanelCellPosition pos = _gridControlView.GridPanel.GetCellPosition(button);
+
+                        if (_grid.Tiles[pos.Row, pos.Column].Crossed)
+                        {
+                            e.Value = img;
+                        }
+                        else
+                        {
+                            e.Value = null;
+                        }
+                    };
+                    newButton.DataBindings.Add(rightClick);
 
 
                     _gridControlView.GridPanel.Controls.Add(newButton, j, i);
