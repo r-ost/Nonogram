@@ -15,10 +15,10 @@ namespace Nonogram.Presenters
         private CountColumnView _view;
 
         private List<int>[] _counts;
-        public List<int>[] Counts { get => _counts; }
+        public List<int>[] Counts { get => _counts; set { _counts = value; } }
 
 
-        public CountColumnPresenter(CountColumnView view, TilesGrid tilesGrid)
+        public CountColumnPresenter(CountColumnView view, TilesGrid tilesGrid, bool createMode)
         {
             _view = view;
 
@@ -34,6 +34,11 @@ namespace Nonogram.Presenters
             int current = 0;
             for (int j = 0; j < tilesGrid.Width; j++)
             {
+                if (createMode)
+                {
+                    _counts[j].Add(0);
+                    continue;
+                }
                 current = 0;
                 prev = false;
                 for (int i = 0; i < tilesGrid.Height; i++)
@@ -96,6 +101,31 @@ namespace Nonogram.Presenters
                 l.Text = text;
                 l.TextAlign = ContentAlignment.BottomCenter;
                 _view.ColumnCountTable.Controls.Add(l);
+            }
+        }
+
+        public void Draw()
+        {
+           // _view.ColumnCountTable.Controls.Clear();
+            for (int i = 0; i < _counts.Length; i++)
+            {
+                //Label l = new Label();
+                //l.FlatStyle = FlatStyle.Flat;
+                //l.Size = new Size(Tile.Width, 100);
+                //l.Dock = DockStyle.Fill;
+                string text = "";
+                foreach (var num in _counts[i])
+                {
+                    text += $"{num}\n";
+                }
+
+                if (text == "")
+                    text = "0";
+                text = text.Trim('\n');
+                //l.Text = text;
+                //l.TextAlign = ContentAlignment.BottomCenter;
+                _view.ColumnCountTable.Controls[i].Text = text;
+                //_view.ColumnCountTable.Controls.Add(l);
             }
         }
     }

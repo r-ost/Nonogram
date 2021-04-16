@@ -19,6 +19,7 @@ namespace Nonogram.Presenters
         private TilesGrid _tilesGrid;
          
         public TilesGrid TilesGrid { get => _tilesGrid; }
+        private bool _createMode = false;
 
 
         private List<int>[] _rowsCounts;
@@ -38,19 +39,34 @@ namespace Nonogram.Presenters
         }
 
 
+        public CountColumnPresenter ColumnPresenter { get; set; } = null;
+        public CountRowPresenter RowPresenter { get; set; } = null;
 
-        public GridPresenter(GridControlView gridControlView, bool createOnStartup, int w = 0, int h = 0)
+
+        public GridPresenter(GridControlView gridControlView, bool createOnStartup, bool createMode = false, int w = 0, int h = 0, 
+            List<int>[] rowsCount = null, List<int>[] columnsCount = null)
         {
-            _rowsCounts = new List<int>[0];
-            _columnsCounts = new List<int>[0];
+            if (rowsCount == null)
+            { _rowsCounts = new List<int>[w]; }
+            else
+                _rowsCounts = rowsCount;
+            if (columnsCount == null)
+                _columnsCounts = new List<int>[h];
+            else
+                _columnsCounts = columnsCount;
+           
+
+            currRows = new List<int>[w];
+            currColumns = new List<int>[h];
 
             _gridControlView = gridControlView;
             _tilesGrid = new TilesGrid();
             
             if (createOnStartup)
-                CreateGridOnStartup();
+                CreateGridOnStartup(w, h);
             else
             {
+                _createMode = createMode;
                 _tilesGrid.Height = h;
                 _tilesGrid.Width = w;
                 _tilesGrid.Tiles = new Tile[h, w];
@@ -62,10 +78,10 @@ namespace Nonogram.Presenters
                         Tile tile = new Tile();
                         tile.Crossed = false;
 
-                        if (rand.Next() % 100 < 50)
+                        //if (rand.Next() % 100 < 50)
+                        //    tile.Selected = false;
+                        //else
                             tile.Selected = false;
-                        else
-                            tile.Selected = true;
 
                         _tilesGrid.Tiles[i, j] = tile;
                     }
@@ -80,10 +96,9 @@ namespace Nonogram.Presenters
             currColumns = new List<int>[_tilesGrid.Width];
         }
 
-        public void CreateGridOnStartup()
+        public void CreateGridOnStartup(int width, int height)
         {
-            int width = 5;
-            int height = 3;
+   
 
             _tilesGrid.Height = height;
             _tilesGrid.Width = width;
@@ -146,11 +161,74 @@ namespace Nonogram.Presenters
                     leftClick.Format += (s, e) => {
                         e.Value = (bool)e.Value ? Color.Black : Color.White;
 
-                        //if (Win())
-                        //{
-                        //    Disable();
-                        //    MessageBox.Show("You won!");
-                        //}
+                        if (_createMode)
+                        {
+                            for (int k = 0; k < _rowsCounts.Length; k++)
+                            {
+                                int current = 0;
+                                bool prev = false;
+                                currRows[k] = new List<int>();
+                                for (int kk = 0; kk < _tilesGrid.Width; kk++)
+                                {
+                                    if (_tilesGrid.Tiles[k, kk].Selected)
+                                    {
+                                        current++;
+                                        prev = true;
+                                    }
+                                    else if (prev && !_tilesGrid.Tiles[k, kk].Selected)
+                                    {
+                                        currRows[k].Add(current);
+                                        current = 0;
+                                        prev = false;
+                                    }
+                                    else if (!_tilesGrid.Tiles[k, kk].Selected)
+                                        prev = false;
+
+                                }
+
+                                if (current > 0)
+                                    currRows[k].Add(current);
+                            }
+
+                            for (int k = 0; k < _columnsCounts.Length; k++)
+                            {
+                                int current = 0;
+                                bool prev = false;
+                                currColumns[k] = new List<int>();
+                                for (int kk = 0; kk < _tilesGrid.Height; kk++)
+                                {
+                                    if (_tilesGrid.Tiles[kk, k].Selected)
+                                    {
+                                        current++;
+                                        prev = true;
+                                    }
+                                    else if (prev && !_tilesGrid.Tiles[kk, k].Selected)
+                                    {
+                                        currColumns[k].Add(current);
+                                        current = 0;
+                                        prev = false;
+                                    }
+                                    else if (!_tilesGrid.Tiles[kk, k].Selected)
+                                        prev = false;
+
+                                }
+
+                                if (current > 0)
+                                    currColumns[k].Add(current);
+                            }
+
+                            ColumnPresenter.Counts = currColumns;
+                            RowPresenter.Counts = currRows;
+
+                            ColumnPresenter.Draw();
+                            RowPresenter.Draw();
+                        }
+
+                        if (!_createMode && Win())
+                        {
+                            Disable();
+                            MessageBox.Show("You won!");
+                        }
                     };
                     newButton.DataBindings.Add(leftClick);
 
@@ -215,8 +293,8 @@ namespace Nonogram.Presenters
 
         }
 
-        private List<int>[] currRows = new List<int>[0];
-        private List<int>[] currColumns = new List<int>[0];
+        private List<int>[] currRows;
+        private List<int>[] currColumns;
         private bool Won = false;
         private bool Win()
         {
@@ -227,7 +305,7 @@ namespace Nonogram.Presenters
                 int current = 0;
                 bool prev = false;
                 currRows[k] = new List<int>();
-                for (int kk = 0; kk < _tilesGrid.Width; kk++)
+                for (int kk = 0; kk < _columnsCounts.Length; kk++)
                 {
                     if (_tilesGrid.Tiles[k, kk].Selected)
                     {
@@ -254,7 +332,7 @@ namespace Nonogram.Presenters
                 int current = 0;
                 bool prev = false;
                 currColumns[k] = new List<int>();
-                for (int kk = 0; kk < _tilesGrid.Height; kk++)
+                for (int kk = 0; kk < _rowsCounts.Length; kk++)
                 {
                     if (_tilesGrid.Tiles[kk, k].Selected)
                     {

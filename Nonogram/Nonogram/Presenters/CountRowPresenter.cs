@@ -15,9 +15,9 @@ namespace Nonogram.Presenters
         private CountRowView _view;
 
         private List<int>[] _counts;
-        public List<int>[] Counts { get => _counts; }
+        public List<int>[] Counts { get => _counts; set { _counts = value; } }
 
-        public CountRowPresenter(CountRowView view, TilesGrid tilesGrid)
+        public CountRowPresenter(CountRowView view, TilesGrid tilesGrid, bool createMode)
         {
             _view = view;
 
@@ -34,10 +34,18 @@ namespace Nonogram.Presenters
             int current = 0;
             for (int i = 0; i < tilesGrid.Height; i++)
             {
+                if (createMode)
+                {
+                    _counts[i].Add(0);
+                    continue;
+                }
+
                 current = 0;
                 prev = false;
                 for (int j = 0; j < tilesGrid.Width; j++)
                 {
+                    
+
                     if (tilesGrid.Tiles[i, j].Selected)
                     {
                         current++;
@@ -52,6 +60,7 @@ namespace Nonogram.Presenters
                     else if (!tilesGrid.Tiles[i, j].Selected)
                         prev = false;
 
+                    
                 }
 
                 if (current > 0)
@@ -101,6 +110,31 @@ namespace Nonogram.Presenters
             }
 
             
+        }
+
+
+        public void Draw()
+        {
+            //_view.RowCountTable.Controls.Clear();
+            for (int i = 0; i < _counts.Length; i++)
+            {
+                //Label l = new Label();
+                //l.FlatStyle = FlatStyle.Flat;
+                //l.Size = new Size(Tile.Width, 100);
+                //l.Dock = DockStyle.Fill;
+                string text = "";
+                foreach (var num in _counts[i])
+                {
+                    text += $"{num} ";
+                }
+               
+                text = text.Trim(' ');
+                if (text == "")
+                    text = "0";
+                //l.Text = text;
+                //l.TextAlign = ContentAlignment.MiddleRight;
+                _view.RowCountTable.Controls[i].Text = text;
+            }
         }
     }
 }

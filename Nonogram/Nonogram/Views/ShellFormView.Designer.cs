@@ -134,8 +134,11 @@ namespace Nonogram.Views
         private System.Windows.Forms.ToolStripMenuItem createMenuItem;
         public System.Windows.Forms.ToolStripMenuItem CreateMenuItem { get => createMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem randomSubMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem RandomSubMenuItem { get => randomSubMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem chooseSubMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem ChooseSubMenuItem { get => chooseSubMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem loadSubMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem LoadSubMenuItem { get => loadSubMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem createPuzzleSubMenuItem;
         public System.Windows.Forms.ToolStripMenuItem CreatePuzzleSubMenuItem { get => createPuzzleSubMenuItem;  }
         private System.Windows.Forms.Panel gridWrapper;
