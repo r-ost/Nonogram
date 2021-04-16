@@ -39,12 +39,40 @@ namespace Nonogram.Presenters
 
 
 
-        public GridPresenter(GridControlView gridControlView)
+        public GridPresenter(GridControlView gridControlView, bool createOnStartup, int w = 0, int h = 0)
         {
+            _rowsCounts = new List<int>[0];
+            _columnsCounts = new List<int>[0];
+
             _gridControlView = gridControlView;
             _tilesGrid = new TilesGrid();
             
-            CreateGridOnStartup();
+            if (createOnStartup)
+                CreateGridOnStartup();
+            else
+            {
+                _tilesGrid.Height = h;
+                _tilesGrid.Width = w;
+                _tilesGrid.Tiles = new Tile[h, w];
+                Random rand = new Random();
+                for (int i = 0; i < _tilesGrid.Tiles.GetLength(0); i++)
+                {
+                    for (int j = 0; j < _tilesGrid.Tiles.GetLength(1); j++)
+                    {
+                        Tile tile = new Tile();
+                        tile.Crossed = false;
+
+                        if (rand.Next() % 100 < 50)
+                            tile.Selected = false;
+                        else
+                            tile.Selected = true;
+
+                        _tilesGrid.Tiles[i, j] = tile;
+                    }
+                }
+
+                InitializeGrid();
+            }
 
             DrawTiles(_tilesGrid.Height, _tilesGrid.Width);
 
@@ -118,11 +146,11 @@ namespace Nonogram.Presenters
                     leftClick.Format += (s, e) => {
                         e.Value = (bool)e.Value ? Color.Black : Color.White;
 
-                        if (Win())
-                        {
-                            Disable();
-                            MessageBox.Show("You won!");
-                        }
+                        //if (Win())
+                        //{
+                        //    Disable();
+                        //    MessageBox.Show("You won!");
+                        //}
                     };
                     newButton.DataBindings.Add(leftClick);
 
@@ -187,8 +215,8 @@ namespace Nonogram.Presenters
 
         }
 
-        private List<int>[] currRows;
-        private List<int>[] currColumns;
+        private List<int>[] currRows = new List<int>[0];
+        private List<int>[] currColumns = new List<int>[0];
         private bool Won = false;
         private bool Win()
         {

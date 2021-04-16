@@ -64,21 +64,21 @@ namespace Nonogram.Views
             // 
             // randomSubMenuItem
             // 
-            this.randomSubMenuItem.Enabled = false;
+            this.randomSubMenuItem.Enabled = true;
             this.randomSubMenuItem.Name = "randomSubMenuItem";
             this.randomSubMenuItem.Size = new System.Drawing.Size(188, 26);
             this.randomSubMenuItem.Text = "Random";
             // 
             // chooseSubMenuItem
             // 
-            this.chooseSubMenuItem.Enabled = false;
+            this.chooseSubMenuItem.Enabled = true;
             this.chooseSubMenuItem.Name = "chooseSubMenuItem";
             this.chooseSubMenuItem.Size = new System.Drawing.Size(188, 26);
             this.chooseSubMenuItem.Text = "Choose puzzle";
             // 
             // loadSubMenuItem
             // 
-            this.loadSubMenuItem.Enabled = false;
+            this.loadSubMenuItem.Enabled = true;
             this.loadSubMenuItem.Name = "loadSubMenuItem";
             this.loadSubMenuItem.Size = new System.Drawing.Size(188, 26);
             this.loadSubMenuItem.Text = "Load puzzle";
@@ -93,7 +93,7 @@ namespace Nonogram.Views
             // 
             // createPuzzleSubMenuItem
             // 
-            this.createPuzzleSubMenuItem.Enabled = false;
+            this.createPuzzleSubMenuItem.Enabled = true;
             this.createPuzzleSubMenuItem.Name = "createPuzzleSubMenuItem";
             this.createPuzzleSubMenuItem.Size = new System.Drawing.Size(191, 26);
             this.createPuzzleSubMenuItem.Text = "Create puzzle...";
@@ -130,11 +130,14 @@ namespace Nonogram.Views
 
         private System.Windows.Forms.MenuStrip mainStrip;
         private System.Windows.Forms.ToolStripMenuItem newGameMenuItem;
+        public  System.Windows.Forms.ToolStripMenuItem NewGameMenuItem { get => newGameMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem createMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem CreateMenuItem { get => createMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem randomSubMenuItem;
         private System.Windows.Forms.ToolStripMenuItem chooseSubMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loadSubMenuItem;
         private System.Windows.Forms.ToolStripMenuItem createPuzzleSubMenuItem;
+        public System.Windows.Forms.ToolStripMenuItem CreatePuzzleSubMenuItem { get => createPuzzleSubMenuItem;  }
         private System.Windows.Forms.Panel gridWrapper;
         public System.Windows.Forms.Panel GridWrapper { get => gridWrapper; }
     }
