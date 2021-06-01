@@ -14,21 +14,18 @@ namespace Nonogram.Presenters
 {
     class ShellPresenter
     {
-        private ShellFormView _view;
-        private GridControlView _gridControlView;
-        private CountColumnView _countColumnView;
-        private CountRowView _countRowView;
+        private readonly ShellFormView _view;
 
         public ShellPresenter(ShellFormView view)
         {
             _view = view;
-            _gridControlView = new GridControlView();
-            _countColumnView = new CountColumnView();
-            _countRowView = new CountRowView();
+            var gridControlView = new GridControlView();
+            var countColumnView = new CountColumnView();
+            var countRowView = new CountRowView();
 
-            var gridPresenter = new GridPresenter(_gridControlView, true, false, 10, 10);
-            var columnPresenter = new CountColumnPresenter(_countColumnView, gridPresenter.TilesGrid, false);
-            var rowPresenter = new CountRowPresenter(_countRowView, gridPresenter.TilesGrid, false);
+            var gridPresenter = new GridPresenter(gridControlView, true, false, 10, 10);
+            var columnPresenter = new CountColumnPresenter(countColumnView, gridPresenter.TilesGrid, false);
+            var rowPresenter = new CountRowPresenter(countRowView, gridPresenter.TilesGrid, false);
             gridPresenter.RowsCounts = rowPresenter.Counts;
             gridPresenter.ColumnsCounts = columnPresenter.Counts;
 
@@ -41,18 +38,18 @@ namespace Nonogram.Presenters
                 }
             }
 
-            int meshWidth = _gridControlView.Width;
-            int meshHeight = _gridControlView.Height;
+            int meshWidth = gridControlView.Width;
+            int meshHeight = gridControlView.Height;
             int X = (_view.GridWrapper.Width - meshWidth) / 2;
             int Y = (_view.GridWrapper.Height - meshHeight) / 2;
 
-            _gridControlView.Location = new Point(X, Y);
-            _countColumnView.Location = new Point(X, Y - 100);
-            _countRowView.Location = new Point(X - 100, Y);
+            gridControlView.Location = new Point(X, Y);
+            countColumnView.Location = new Point(X, Y - 100);
+            countRowView.Location = new Point(X - 100, Y);
 
-            _view.GridWrapper.Controls.Add(_gridControlView);
-            _view.GridWrapper.Controls.Add(_countRowView);
-            _view.GridWrapper.Controls.Add(_countColumnView);
+            _view.GridWrapper.Controls.Add(gridControlView);
+            _view.GridWrapper.Controls.Add(countRowView);
+            _view.GridWrapper.Controls.Add(countColumnView);
 
 
             _view.CreatePuzzleSubMenuItem.Click += (s, e) =>
@@ -62,9 +59,9 @@ namespace Nonogram.Presenters
 
                 if (sizeDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    _view.GridWrapper.Controls.Remove(_gridControlView);
-                    _view.GridWrapper.Controls.Remove(_countColumnView);
-                    _view.GridWrapper.Controls.Remove(_countRowView);
+                    _view.GridWrapper.Controls.Clear();
+
+
                     height = sizeDialog.GridHeight;
                     width = sizeDialog.GridWidth;
 
@@ -106,15 +103,15 @@ namespace Nonogram.Presenters
                             }
 
                             _view.GridWrapper.Controls.Clear();
-                            _gridControlView = new GridControlView();
-                            _countColumnView = new CountColumnView();
-                            _countRowView = new CountRowView();
+                            gridControlView = new GridControlView();
+                            countColumnView = new CountColumnView();
+                            countRowView = new CountRowView();
 
-                            gridPresenter = new GridPresenter(_gridControlView, false, false, newGame.Width, newGame.Height, newGame.RowsLabels, newGame.ColumnsLabels);
+                            gridPresenter = new GridPresenter(gridControlView, false, false, newGame.Width, newGame.Height, newGame.RowsLabels, newGame.ColumnsLabels);
 
 
-                            columnPresenter = new CountColumnPresenter(_countColumnView, gridPresenter.TilesGrid, false);
-                            rowPresenter = new CountRowPresenter(_countRowView, gridPresenter.TilesGrid, false);
+                            columnPresenter = new CountColumnPresenter(countColumnView, gridPresenter.TilesGrid, false);
+                            rowPresenter = new CountRowPresenter(countRowView, gridPresenter.TilesGrid, false);
                             gridPresenter.ColumnPresenter = columnPresenter;
                             gridPresenter.ColumnPresenter.Counts = newGame.ColumnsLabels;
                             gridPresenter.RowPresenter = rowPresenter;
@@ -138,18 +135,18 @@ namespace Nonogram.Presenters
                                 }
                             }
 
-                            int meshWidth = _gridControlView.Width;
-                            int meshHeight = _gridControlView.Height;
+                            int meshWidth = gridControlView.Width;
+                            int meshHeight = gridControlView.Height;
                             int X = (_view.GridWrapper.Width - meshWidth) / 2;
                             int Y = (_view.GridWrapper.Height - meshHeight) / 2;
 
-                            _gridControlView.Location = new Point(X, Y);
-                            _countColumnView.Location = new Point(X, Y - 100);
-                            _countRowView.Location = new Point(X - 100, Y);
+                            gridControlView.Location = new Point(X, Y);
+                            countColumnView.Location = new Point(X, Y - 100);
+                            countRowView.Location = new Point(X - 100, Y);
 
-                            _view.GridWrapper.Controls.Add(_gridControlView);
-                            _view.GridWrapper.Controls.Add(_countRowView);
-                            _view.GridWrapper.Controls.Add(_countColumnView);
+                            _view.GridWrapper.Controls.Add(gridControlView);
+                            _view.GridWrapper.Controls.Add(countRowView);
+                            _view.GridWrapper.Controls.Add(countColumnView);
                         }
                     }
                     catch (Exception ex)
@@ -167,22 +164,22 @@ namespace Nonogram.Presenters
 
                 if (sizeDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
-                    _view.GridWrapper.Controls.Remove(_gridControlView);
-                    _view.GridWrapper.Controls.Remove(_countColumnView);
-                    _view.GridWrapper.Controls.Remove(_countRowView);
+                    _view.GridWrapper.Controls.Remove(gridControlView);
+                    _view.GridWrapper.Controls.Remove(countColumnView);
+                    _view.GridWrapper.Controls.Remove(countRowView);
                     height = sizeDialog.GridHeight;
                     width = sizeDialog.GridWidth;
 
                     _view.GridWrapper.Controls.Clear();
-                    _gridControlView = new GridControlView();
-                    _countColumnView = new CountColumnView();
-                    _countRowView = new CountRowView();
+                    gridControlView = new GridControlView();
+                    countColumnView = new CountColumnView();
+                    countRowView = new CountRowView();
 
-                    gridPresenter = new GridPresenter(_gridControlView, true, false, width, height);
+                    gridPresenter = new GridPresenter(gridControlView, true, false, width, height);
 
 
-                    columnPresenter = new CountColumnPresenter(_countColumnView, gridPresenter.TilesGrid, false);
-                    rowPresenter = new CountRowPresenter(_countRowView, gridPresenter.TilesGrid, false);
+                    columnPresenter = new CountColumnPresenter(countColumnView, gridPresenter.TilesGrid, false);
+                    rowPresenter = new CountRowPresenter(countRowView, gridPresenter.TilesGrid, false);
                     gridPresenter.ColumnPresenter = columnPresenter;
                     gridPresenter.RowPresenter = rowPresenter;
 
@@ -202,18 +199,18 @@ namespace Nonogram.Presenters
                         }
                     }
 
-                    int meshWidth = _gridControlView.Width;
-                    int meshHeight = _gridControlView.Height;
+                    int meshWidth = gridControlView.Width;
+                    int meshHeight = gridControlView.Height;
                     int X = (_view.GridWrapper.Width - meshWidth) / 2;
                     int Y = (_view.GridWrapper.Height - meshHeight) / 2;
 
-                    _gridControlView.Location = new Point(X, Y);
-                    _countColumnView.Location = new Point(X, Y - 100);
-                    _countRowView.Location = new Point(X - 100, Y);
+                    gridControlView.Location = new Point(X, Y);
+                    countColumnView.Location = new Point(X, Y - 100);
+                    countRowView.Location = new Point(X - 100, Y);
 
-                    _view.GridWrapper.Controls.Add(_gridControlView);
-                    _view.GridWrapper.Controls.Add(_countRowView);
-                    _view.GridWrapper.Controls.Add(_countColumnView);
+                    _view.GridWrapper.Controls.Add(gridControlView);
+                    _view.GridWrapper.Controls.Add(countRowView);
+                    _view.GridWrapper.Controls.Add(countColumnView);
                 }
             };
 

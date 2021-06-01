@@ -15,10 +15,7 @@ namespace Nonogram.Models
 
         public bool Crossed 
         {
-            get
-            {
-                return _crossed;
-            }
+            get => _crossed;
             set
             {
                 _crossed = value;
@@ -29,10 +26,7 @@ namespace Nonogram.Models
         private bool _selected;
         public bool Selected
         {
-            get
-            {
-                return _selected;
-            }
+            get => _selected;
             set
             {
                 _selected = value;
@@ -46,7 +40,7 @@ namespace Nonogram.Models
 
 
 
-        private void NotifyPropertyChanged([CallerMemberName] String propertyName = "")
+        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
         {
             if (PropertyChanged != null)
             {

@@ -129,8 +129,10 @@ namespace Nonogram.Views
         #endregion
 
         private System.Windows.Forms.MenuStrip mainStrip;
+
         private System.Windows.Forms.ToolStripMenuItem newGameMenuItem;
         public  System.Windows.Forms.ToolStripMenuItem NewGameMenuItem { get => newGameMenuItem; }
+
         private System.Windows.Forms.ToolStripMenuItem createMenuItem;
         public System.Windows.Forms.ToolStripMenuItem CreateMenuItem { get => createMenuItem; }
         private System.Windows.Forms.ToolStripMenuItem randomSubMenuItem;
